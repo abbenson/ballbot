@@ -18,5 +18,5 @@ class Controller:
     def update(self, vx_new, vy_new, pitch_new, roll_new):
         self.vx_pid.update(vx_new)
         self.vy_pid.update(vy_new)
-        self.pitch_pid(pitch_new)
-        self.roll_pid(roll_new)
+        self.pitch_pid.update(pitch_new)
+        self.roll_pid.update(roll_new)
