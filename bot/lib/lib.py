@@ -204,6 +204,7 @@ def api_call(f):
 
     TODO(dfarrell07): Shorten summary, add longer note here if needed.
 
+    :rtype: object
     :param f: TODO
     :type f: TODO
     :returns: TODO
