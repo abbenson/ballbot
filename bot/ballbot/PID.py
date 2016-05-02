@@ -40,11 +40,12 @@ class PID:
         self.Kp = P
         self.Ki = I
         self.Kd = D
+        self.N = 500
 
         self.sample_time = 0.00
         self.current_time = time.time()
         self.last_time = self.current_time
-
+        self.alpha = .0095
         self.clear()
 
     def clear(self):
@@ -54,6 +55,7 @@ class PID:
         self.PTerm = 0.0
         self.ITerm = 0.0
         self.DTerm = 0.0
+        self.accumulator = 0.0
         self.last_error = 0.0
 
         # Windup Guard
@@ -88,6 +90,8 @@ class PID:
             self.DTerm = 0.0
             if delta_time > 0:
                 self.DTerm = delta_error / delta_time
+                self.accumulator = (self.alpha * self.DTerm) + (1.0 - self.alpha) * self.accumulator
+                self.DTerm = self.accumulator
 
             # Remember last time and last error for next calculation
             self.last_time = self.current_time

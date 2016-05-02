@@ -3,28 +3,29 @@ import Adafruit_BBIO.UART as UART
 import binascii
 import struct
 import time
+from bbio import *
 
 UART.setup("UART4")
 
 # Setup serial connection to IMU
 ser = serial.Serial(port="/dev/ttyO4", baudrate=57600, timeout=None)
 
+tp = GPIO1_16
+pinMode(tp, OUTPUT)
+
 # Open serial
 ser.write("#o1#ob")
 ser.flushInput()
 ser.write("#s00")
 
-token = "#SYNCH00\r\n"
-
-while ser.readline() != token:
-    print "Token wrong"
+print ser.readline()
+ser.flushInput()
 
 while 1:
-    while ser.inWaiting() < 12:
-        pass
+    digitalWrite(tp, HIGH)
 
-    yaw = struct.unpack('<f', ser.read(4))[0]
-    pitch = struct.unpack('<f', ser.read(4))[0]
-    roll = struct.unpack('<f', ser.read(4))[0]
-
-    print "y:%f, p:%f, r:%f" % (yaw, pitch, roll)
+    y = struct.unpack('<f', ser.read(4))[0]
+    p = struct.unpack('<f', ser.read(4))[0]
+    r = struct.unpack('<f', ser.read(4))[0]
+    digitalWrite(tp, LOW)
+    print "y:%f, p:%f, r:%f" % (y, p, r)
